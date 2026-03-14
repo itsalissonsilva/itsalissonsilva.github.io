@@ -55,7 +55,7 @@
         <p>
           The current stage goes further. Transformer models and LLMs make it possible to move beyond a single polarity
           score and interpret reviews in a more contextual way. A modern system can still preserve the strengths of
-          classical sentiment analysis — reproducibility, fast scoring, distribution plots, interpretable word clouds —
+          classical sentiment analysis , reproducibility, fast scoring, distribution plots, interpretable word clouds ,
           while adding a higher-level layer that extracts multiple dimensions of user perception. That is exactly the
           perspective adopted in this upgraded project.
         </p>
@@ -69,7 +69,13 @@
           directors. An analysis of movie reviews made by users at Letterboxd was carried out, aiming to explore how the
           sentiments differ for directors in different genres and levels of popularity. That first version is still an
           important part of the story because it motivated the broader question behind the project: what can review text
-          reveal about the way people emotionally receive a film?
+          reveal about the way people emotionally receive a film? It also provided a concrete setting in which sentiment
+          analysis could be tested against recognizable cultural objects rather than abstract benchmark examples. A review
+          attached to a film carries context, expectations, genre conventions, and the influence of a director's previous
+          work, so the text is not just positive or negative in the abstract. It is part of a broader reception process.
+          That made Letterboxd especially interesting as a starting point: users were reacting to identifiable titles in a
+          public and highly opinionated environment, which made it possible to connect linguistic patterns back to a clear
+          source.
         </p>
         <p>
           We started by scraping data from Letterboxd using BeautifulSoup. We collected many pages of reviews for a
@@ -106,36 +112,10 @@
       </div>
 
       <br><br>
-      <h2 class="section-title text-center" style="font-size: 2.5rem !important;">03 - Classical Approach</h2>
+      <h2 class="section-title text-center" style="font-size: 2.5rem !important;">03 - The upgrade: LLMs and Steam user reviews</h2>
       <div class="text-center">
         <p>
-          The classical version of the pipeline was intentionally simple and interpretable. Reviews were collected,
-          cleaned, and scored with VADER, which is a lexicon-and-rule-based sentiment model designed for social and
-          review-like text. Each review received a compound score in the interval [-1, 1], and from there the project
-          could produce histograms, gaussian fits, summary statistics, and positive/negative partitions for downstream
-          visualization.
-        </p>
-        <p>
-          This approach has several strengths. It is fast, reproducible, easy to explain, and particularly useful for
-          getting a first quantitative sense of audience reaction. It also lends itself naturally to visual analytics:
-          score distributions show whether reactions are concentrated or polarized, and word clouds reveal recurrent
-          lexical patterns. For a first-pass portfolio project, this made it possible to build a clear bridge between raw
-          user-generated text and compact visual summaries.
-        </p>
-        <p>
-          At the same time, the limitations are equally instructive. A single compound score compresses many kinds of
-          experience into one axis. A review may be positive because the user loved the narrative, because the game or
-          film felt immersive, or because they thought the purchase was worth the price. Another may be negative because
-          of bugs, pacing, technical issues, or unmet expectations. Classical sentiment captures polarity, but not the
-          specific structure of that polarity. That limitation is exactly what motivated the upgrade.
-        </p>
-      </div>
-
-      <br><br>
-      <h2 class="section-title text-center" style="font-size: 2.5rem !important;">04 - The upgrade: LLMs and Steam user reviews</h2>
-      <div class="text-center">
-        <p>
-          The updated version keeps the same general objective — extracting audience reaction from review text — but
+          The updated version keeps the same general objective , extracting audience reaction from review text , but
           changes both the data source and the analytical layer. Because large-scale scraping of Letterboxd reviews
           became impractical, the project pivoted to official Steam user reviews. This makes the data collection step
           much more stable while preserving a core advantage of the original project: the text still comes from real user
