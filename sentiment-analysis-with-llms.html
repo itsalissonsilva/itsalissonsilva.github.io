@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sentiment Analysis with LLMs</title>
+  <link rel="stylesheet" href="/index.9cb64252.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+  <section class="jumbotron" id="project-detail">
+    <div class="container">
+      <h1 class="section-title text-center">Sentiment Analysis with LLMs</h1>
+
+      <div class="text-center">
+        <p>
+          This project is an update of the earlier
+          <a href="https://github.com/itsalissonsilva/LetterboxdSentiment" target="_blank">Letterboxd Sentiment</a>
+          work. The original version focused on scraping Letterboxd movie reviews and analyzing them with a classical
+          sentiment pipeline based on VADER and word-frequency visualizations. After changes in site protections made
+          large-scale scraping unreliable, the project was rethought rather than abandoned. The new version keeps the
+          original intuition of comparing audience reactions through review text, but upgrades the data source and the
+          analysis layer: instead of relying only on a single scalar sentiment score, it now combines official Steam
+          user reviews with LLM-based multidimensional interpretation.
+        </p>
+        <p>
+          In practice, this turns the project into both a continuation and an expansion. The first iteration remains a
+          useful case study in classical sentiment analysis over movie reviews, while the updated version moves toward a
+          richer workflow in which language models can separate different kinds of reactions such as enjoyment,
+          frustration, immersion, value satisfaction, and technical satisfaction. The result is not just a positive vs.
+          negative split, but a more structured picture of how users talk about a title.
+        </p>
+      </div>
+
+      <br><br>
+      <h2 class="section-title text-center" style="font-size: 2.5rem !important;">01 - History of Sentiment Analysis</h2>
+      <div class="text-center">
+        <p>
+          Modern sentiment analysis is usually associated with the early 2000s, when the growth of online reviews,
+          forums, and product feedback created a strong demand for automated ways to measure opinion at scale. Yet the
+          roots of the field are older. Early work relied on hand-built lexicons: researchers assembled lists of words
+          associated with positive or negative affect and then counted their occurrences inside a document. Even this
+          simple approach already suggested an important idea that still survives today: language carries measurable
+          emotional signals, and those signals can be aggregated into something quantitatively meaningful.
+        </p>
+        <p>
+          A second stage came with machine learning approaches that treated sentiment as a text classification problem.
+          Instead of relying only on manually curated vocabularies, models learned from labeled examples. Bag-of-words,
+          n-grams, TF-IDF features, and linear classifiers became standard tools because they were lightweight and often
+          surprisingly effective. For review data in particular, these methods established a practical baseline: sentiment
+          could be modeled as a function of lexical choice, repetition, and emphasis, even when the underlying semantics
+          were not deeply understood.
+        </p>
+        <p>
+          The current stage goes further. Transformer models and LLMs make it possible to move beyond a single polarity
+          score and interpret reviews in a more contextual way. A modern system can still preserve the strengths of
+          classical sentiment analysis — reproducibility, fast scoring, distribution plots, interpretable word clouds —
+          while adding a higher-level layer that extracts multiple dimensions of user perception. That is exactly the
+          perspective adopted in this upgraded project.
+        </p>
+      </div>
+
+      <br><br>
+      <h2 class="section-title text-center" style="font-size: 2.5rem !important;">02 - Database: Letterboxd Movie Reviews</h2>
+      <div class="text-center">
+        <p>
+          The original project undertook a sentiment analysis to compare the audience's emotional responses toward movie
+          directors. An analysis of movie reviews made by users at Letterboxd was carried out, aiming to explore how the
+          sentiments differ for directors in different genres and levels of popularity. That first version is still an
+          important part of the story because it motivated the broader question behind the project: what can review text
+          reveal about the way people emotionally receive a film?
+        </p>
+        <p>
+          We started by scraping data from Letterboxd using BeautifulSoup. We collected many pages of reviews for a
+          given movie and used NLTK's SentimentIntensityAnalyzer to evaluate a sentiment score for each review. This
+          produced a compound metric that allowed the text to be organized into positive, negative, or neutral groups.
+        </p>
+        <img src="/review1.ee122f4d.png" alt="Letterboxd review analysis plot 1" style="width:700px;max-width:100%;height:400px;max-height:100%">
+        <img src="/review2.8f1b486e.png" alt="Letterboxd review analysis plot 2" style="width:700px;max-width:100%;height:400px;max-height:100%">
+        <p>
+          By aggregating these scores, it became possible to gauge the overall audience reception of a film and compare
+          it with factors such as genre, popularity, or critical reputation. Excluding zero scores gave a distribution
+          that often looked approximately gaussian. For Interstellar, for example, the resulting curve had a positive
+          center with a moderate spread, suggesting that the audience was not just favorable overall but also clustered
+          around a fairly coherent reaction.
+        </p>
+        <img src="/gaussian1.06e9bb19.png" alt="Gaussian fit 1" style="width:700px;max-width:100%;height:400px;max-height:100%">
+        <img src="/gaussian2.6177b082.png" alt="Gaussian fit 2" style="width:550px;max-width:100%;height:400px;max-height:100%">
+        <p>
+          The project then moved beyond a single score by plotting word clouds for positive and negative reviews. The
+          word cloud displays the most frequently occurring words within each sentiment category, with the size of each
+          word indicative of its prevalence in the reviews. This offered a fast qualitative view of the themes audiences
+          associated with a viewing experience and highlighted which descriptors appeared repeatedly on each side of the
+          sentiment divide.
+        </p>
+        <img src="/wordcloud1.2226aead.png" alt="Positive word cloud" style="width:700px;max-width:100%;height:400px;max-height:100%">
+        <img src="/wordcloud2.2ad207e6.png" alt="Negative word cloud" style="width:700px;max-width:100%;height:400px;max-height:100%">
+        <p>
+          Although a number of words repeated across both positive and negative reviews, requiring further filtering, it
+          was still possible to distinguish certain terms predominantly associated with favorable reactions and others
+          more common in critical reviews. That distinction helped show both the usefulness and the limitations of the
+          purely classical setup: it was already capable of surfacing structure in the data, but there was clearly room
+          for a more nuanced interpretation of what people actually meant when they liked or disliked a work.
+        </p>
+      </div>
+
+      <br><br>
+      <h2 class="section-title text-center" style="font-size: 2.5rem !important;">03 - Classical Approach</h2>
+      <div class="text-center">
+        <p>
+          The classical version of the pipeline was intentionally simple and interpretable. Reviews were collected,
+          cleaned, and scored with VADER, which is a lexicon-and-rule-based sentiment model designed for social and
+          review-like text. Each review received a compound score in the interval [-1, 1], and from there the project
+          could produce histograms, gaussian fits, summary statistics, and positive/negative partitions for downstream
+          visualization.
+        </p>
+        <p>
+          This approach has several strengths. It is fast, reproducible, easy to explain, and particularly useful for
+          getting a first quantitative sense of audience reaction. It also lends itself naturally to visual analytics:
+          score distributions show whether reactions are concentrated or polarized, and word clouds reveal recurrent
+          lexical patterns. For a first-pass portfolio project, this made it possible to build a clear bridge between raw
+          user-generated text and compact visual summaries.
+        </p>
+        <p>
+          At the same time, the limitations are equally instructive. A single compound score compresses many kinds of
+          experience into one axis. A review may be positive because the user loved the narrative, because the game or
+          film felt immersive, or because they thought the purchase was worth the price. Another may be negative because
+          of bugs, pacing, technical issues, or unmet expectations. Classical sentiment captures polarity, but not the
+          specific structure of that polarity. That limitation is exactly what motivated the upgrade.
+        </p>
+      </div>
+
+      <br><br>
+      <h2 class="section-title text-center" style="font-size: 2.5rem !important;">04 - The upgrade: LLMs and Steam user reviews</h2>
+      <div class="text-center">
+        <p>
+          The updated version keeps the same general objective — extracting audience reaction from review text — but
+          changes both the data source and the analytical layer. Because large-scale scraping of Letterboxd reviews
+          became impractical, the project pivoted to official Steam user reviews. This makes the data collection step
+          much more stable while preserving a core advantage of the original project: the text still comes from real user
+          reactions tied to a specific title.
+        </p>
+        <p>
+          The methodological upgrade is even more important. Instead of relying only on a one-dimensional sentiment
+          polarity score, the new system adds an LLM-based interpretation layer that evaluates multiple dimensions of the
+          review set at once. In the current version, those dimensions are enjoyment, frustration, immersion, value
+          satisfaction, and technical satisfaction. This makes the analysis more expressive: two titles with similarly
+          positive average sentiment can still differ strongly in whether users praise atmosphere, criticize performance,
+          or debate whether the price feels justified.
+        </p>
+        <p>
+          The visualization below summarizes this newer workflow. On one side, the non-zero score distribution still
+          plays the role of the classical baseline, preserving continuity with the first version of the project. On the
+          other, the radar chart adds a higher-level multidimensional reading generated from the corpus of reviews. In
+          this sense, the project evolves from classical sentiment analysis into an LLM-augmented review intelligence
+          pipeline: still grounded in interpretable statistics, but no longer limited to a single scalar notion of
+          positive or negative reception.
+        </p>
+        <img src="assets/results-plot.png" alt="Updated Steam and LLM sentiment results" style="width:1100px;max-width:100%;height:520px;max-height:100%">
+        <p>
+          This upgrade also changes the broader meaning of the project. What began as a movie-review sentiment analyzer
+          now becomes a small framework for comparing how classical NLP and LLM-based interpretation complement one
+          another. The earlier Letterboxd stage remains valuable as a historical and methodological foundation; the Steam
+          and LLM stage pushes the same idea into a more robust, multidimensional, and current direction.
+        </p>
+      </div>
+
+      <br><br>
+      <div class="text-center">
+        <a href="/index.html" class="cta-btn cta-btn--hero">Back to Portfolio</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer navbar-static-bottom">
+    <div class="container">
+      <a href="#top" class="back-to-top">
+        <i class="fa fa-2x fa-angle-up" aria-hidden="true"></i>
+      </a>
+      <div class="social-links">
+        <a href="https://www.instagram.com/silva___alisson/" target="_blank">
+          <i class="fa fa-instagram fa-inverse"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/itsalissonsilva/" target="_blank">
+          <i class="fa fa-inverse fa-linkedin"></i>
+        </a>
+        <a href="https://github.com/itsalissonsilva" target="_blank">
+          <i class="fa fa-github fa-inverse"></i>
+        </a>
+        <a rel="noreferrer" href="https://huggingface.co/itsalissonsilva" target="_blank">
+          <img src="/assets/huggingicon.svg" alt="Hugging Face" style="height: 1.2em; vertical-align: middle;"/>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script defer type="module" src="/index.98e592c3.js"></script>
+</body>
+</html>
