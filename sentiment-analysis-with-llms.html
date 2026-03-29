@@ -115,6 +115,15 @@
           Another may be mechanically fun but seen as overpriced. A single scalar score tends to flatten those distinctions. The LLM layer tries to recover them.
         </p>
         <p>
+          To make the LLM layer easier to inspect and debug, the project also adds tracing with LangSmith from Langchain. Each 
+          review analysis call can be tracked with its input, structured output, and metadata, which makes it much easier 
+          to understand how the radar scores were produced. This is useful not only for checking the JSON returned by the model,
+          but also for monitoring things like token usage, latency, and overall behavior across runs. In practice, this turns the project 
+          into something more than a simple demo: it becomes a small but traceable LLM application where the analysis can be
+          reviewed, monitored, and improved over time.
+        </p>
+        <img src="assets/langsmith-output.png" alt="Langsmith tracing">
+        <p>
           The visualization below summarizes that newer workflow. On one side, the non-zero score distribution still plays the role of the classical baseline, keeping continuity with the first version of the project.
           On the other side, the radar chart adds a multidimensional read of the review set. That combination is really the point of the upgrade: keeping the straightforward interpretability of the older approach,
           while adding a richer model of what people are actually saying. It turns the project from a simple sentiment analyzer into a more general review intelligence pipeline.
